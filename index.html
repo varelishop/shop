@@ -243,14 +243,8 @@ html+=`
 <div class="cartItem">
 
 <div>
-<b>${p.name}</b><br>
-${item.size ? `Չափ՝ ${item.size}<br>` : ""}
-${p.price.toLocaleString()} ֏ × ${item.qty}
-</div>
-
-<div>
-<button onclick="changeQty(${p.id},1)">+</button>
-<button onclick="changeQty(${p.id},-1)">−</button>
+<button onclick="changeQty(${p.id},1,'${item.size || ""}')">+</button>
+<button onclick="changeQty(${p.id},-1,'${item.size || ""}')">−</button>
 </div>
 
 </div>
@@ -267,18 +261,18 @@ total.toLocaleString();
 document.getElementById("cartCount").innerText=count;
 }
 
-function changeQty(id,n){
+function changeQty(id, n, size = ""){
+  let item = cart.find(x => x.id === id && x.size === size);
+  if(!item)return;
 
-let item=cart.find(x=>x.id===id);
-if(!item)return;
+  item.qty += n;
 
-item.qty+=n;
+  if(item.qty <= 0){
+    cart = cart.filter(x => !(x.id === id && x.size === size));
+  }
 
-if(item.qty<=0)
-cart=cart.filter(x=>x.id!==id);
-
-save();
-renderCart();
+  save();
+  renderCart();
 }
 
 function openCart(){
