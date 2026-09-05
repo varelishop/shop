@@ -243,6 +243,12 @@ html+=`
 <div class="cartItem">
 
 <div>
+<b>${p.name}</b><br>
+${item.size ? `Չափ՝ ${item.size}<br>` : ""}
+${p.price.toLocaleString()} ֏ × ${item.qty}
+</div>
+
+<div>
 <button onclick="changeQty(${p.id},1,'${item.size || ""}')">+</button>
 <button onclick="changeQty(${p.id},-1,'${item.size || ""}')">−</button>
 </div>
@@ -251,6 +257,12 @@ html+=`
 
 `;
 });
+
+document.getElementById("cartItems").innerHTML=html;
+document.getElementById("cartTotal").innerText=total.toLocaleString()+" ֏";
+document.getElementById("cartCount").innerText=count;
+
+}
 
 document.getElementById("cart").innerHTML=
 html || "<p>Զամբյուղը դատարկ է։</p>";
