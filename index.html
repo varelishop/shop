@@ -3,42 +3,306 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VARELI — Online Shop</title>
+<title>Vareli Shop</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f7f7f7;color:#111}
-header{background:#fff;padding:15px;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:10}
-.header{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:27px;font-weight:900;letter-spacing:3px}
-button{border:0;padding:11px 15px;border-radius:10px;font-weight:bold;cursor:pointer}
-.cartBtn{background:#111;color:#fff}
-.hero,.search,.categories,.products{max-width:1100px;margin:20px auto;padding:0 15px}
-.hero{padding:55px 25px;background:#111;color:#fff;border-radius:20px}
-.hero h1{font-size:44px;margin-bottom:10px}
-.hero p{color:#ccc;margin-bottom:20px}
-.hero button{background:#fff}
-.search input{width:100%;padding:15px;border:1px solid #ddd;border-radius:12px;font-size:16px}
-.categories{display:flex;gap:8px;overflow:auto}
-.categories button{background:#fff;border:1px solid #ddd}
-.products{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
-.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px #0001}
-.card img{width:100%;height:210px;object-fit:cover;background:#eee}
-.cardInfo{padding:14px}
-.card h3{margin-bottom:8px}
-.price{font-size:19px;font-weight:bold;margin-bottom:12px}
-.add{width:100%;background:#111;color:#fff}
-.panel{position:fixed;right:-100%;top:0;width:360px;max-width:100%;height:100%;background:#fff;z-index:100;padding:20px;transition:.3s;overflow:auto}
-.panel.open{right:0}
-.close{float:right;background:#eee}
-.cartItem{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #ddd}
-.total{font-size:22px;font-weight:bold;margin:20px 0}
-.checkout input,.checkout textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:8px}
-.checkout button{width:100%;background:#111;color:#fff}
-footer{text-align:center;padding:40px;color:#777}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f7f7f7;
+  color:#111;
+}
+
+header{
+  background:#111;
+  color:white;
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:2px;
+}
+
+.cartBtn{
+  background:white;
+  color:#111;
+  border:0;
+  padding:10px 16px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.hero{
+  padding:45px 20px;
+  text-align:center;
+  background:linear-gradient(135deg,#111,#333);
+  color:white;
+}
+
+.hero h1{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#ddd;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:25px 16px;
+}
+
+.search{
+  width:100%;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font-size:16px;
+  margin-bottom:15px;
+}
+
+.categories{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin-bottom:25px;
+}
+
+.categories button{
+  border:1px solid #ddd;
+  background:white;
+  padding:10px 15px;
+  border-radius:20px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.categories button.active{
+  background:#111;
+  color:white;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.card{
+  background:white;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,.07);
+}
+
+.card img{
+  width:100%;
+  height:230px;
+  object-fit:cover;
+  background:#eee;
+}
+
+.cardInfo{
+  padding:15px;
+}
+
+.cardInfo h3{
+  margin-bottom:8px;
+}
+
+.price{
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
+
+.sizeSelect{
+  width:100%;
+  padding:11px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  margin-bottom:10px;
+  background:white;
+}
+
+.add{
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:10px;
+  background:#111;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.empty{
+  text-align:center;
+  padding:50px 10px;
+  color:#777;
+}
+
+.cart{
+  position:fixed;
+  right:-420px;
+  top:0;
+  width:400px;
+  max-width:100%;
+  height:100vh;
+  background:white;
+  z-index:100;
+  box-shadow:-5px 0 25px rgba(0,0,0,.2);
+  transition:.3s;
+  padding:20px;
+  overflow-y:auto;
+}
+
+.cart.open{
+  right:0;
+}
+
+.cartHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.close{
+  border:0;
+  background:#eee;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+.cartItem{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:15px 0;
+  border-bottom:1px solid #eee;
+}
+
+.cartInfo{
+  flex:1;
+}
+
+.cartName{
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.cartSize{
+  color:#555;
+  font-size:14px;
+  margin-bottom:5px;
+}
+
+.qty{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.qty button{
+  width:30px;
+  height:30px;
+  border:0;
+  border-radius:7px;
+  background:#111;
+  color:white;
+  cursor:pointer;
+}
+
+.total{
+  font-size:21px;
+  font-weight:bold;
+  margin:20px 0;
+}
+
+.checkout input,
+.checkout textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  margin-bottom:10px;
+  font-size:15px;
+}
+
+.checkout textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+.checkout button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:#111;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  margin-top:40px;
+  color:#777;
+}
+
 @media(max-width:800px){
-.products{grid-template-columns:repeat(2,1fr)}
-.hero h1{font-size:34px}
+  .products{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .card img{
+    height:200px;
+  }
+}
+
+@media(max-width:500px){
+  .products{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .card img{
+    height:170px;
+  }
+
+  .cardInfo{
+    padding:10px;
+  }
+
+  .hero h1{
+    font-size:27px;
+  }
+
+  .cart{
+    width:100%;
+  }
 }
 </style>
 </head>
@@ -46,301 +310,605 @@ footer{text-align:center;padding:40px;color:#777}
 <body>
 
 <header>
-<div class="header">
-<div class="logo">VARELI</div>
+  <div class="logo">VARELI</div>
 
-<button class="cartBtn" onclick="openCart()">
-🛒 <span id="cartCount">0</span>
-</button>
-
-</div>
+  <button class="cartBtn" onclick="openCart()">
+    🛒 Զամբյուղ (<span id="cartCount">0</span>)
+  </button>
 </header>
 
 <section class="hero">
-<h1>VARELI</h1>
-<p>Ընտրիր քո սիրած ապրանքները</p>
-<button onclick="scrollProducts()">Գնել հիմա</button>
+  <h1>Vareli Shop</h1>
+  <p>Գտիր քո ուզած ապրանքը</p>
 </section>
 
-<div class="search">
-<input id="search"
-placeholder="🔎 Փնտրել ապրանք..."
-oninput="renderProducts">
-</div>
+<div class="container">
 
-<div class="categories">
-<button onclick="setCategory('all')">Բոլորը</button>
-<button onclick="setCategory('beauty')">Beauty</button>
-<button onclick="setCategory('accessories')">Աքսեսուարներ</button>
-<button onclick="setCategory('new')">Նորույթներ</button>
-</div>
+  <input
+    id="search"
+    class="search"
+    type="text"
+    placeholder="Փնտրել ապրանք..."
+    oninput="renderProducts()"
+  >
 
-<section class="products" id="products"></section>
+  <div class="categories">
+    <button class="active" onclick="setCategory('all',this)">Բոլորը</button>
+    <button onclick="setCategory('beauty',this)">Beauty</button>
+    <button onclick="setCategory('accessories',this)">Աքսեսուարներ</button>
+    <button onclick="setCategory('new',this)">Նոր</button>
+  </div>
 
-<div class="panel" id="cartPanel">
-
-<button class="close" onclick="closeCart()">✕</button>
-
-<h2>🛒 Զամբյուղ</h2>
-
-<div id="cart"></div>
-
-<div class="total">
-Ընդամենը՝ <span id="total">0</span> ֏
-</div>
-
-<div class="checkout">
-
-<h3>Պատվեր</h3>
-
-<input id="customerName" placeholder="Անուն Ազգանուն">
-<input id="customerPhone" placeholder="Հեռախոսահամար">
-<input id="customerAddress" placeholder="Հասցե">
-
-<textarea id="customerNote" placeholder="Նշում"></textarea>
-
-<button onclick="checkout()">Պատվիրել</button>
+  <div id="products" class="products"></div>
 
 </div>
+
+<div id="cart" class="cart">
+
+  <div class="cartHeader">
+    <h2>Զամբյուղ</h2>
+    <button class="close" onclick="closeCart()">×</button>
+  </div>
+
+  <div id="cartItems"></div>
+
+  <div class="total">
+    Ընդհանուր՝ <span id="cartTotal">0 ֏</span>
+  </div>
+
+  <div class="checkout">
+
+    <input
+      id="customerName"
+      type="text"
+      placeholder="Անուն"
+    >
+
+    <input
+      id="customerPhone"
+      type="tel"
+      placeholder="Հեռախոս"
+    >
+
+    <input
+      id="customerAddress"
+      type="text"
+      placeholder="Հասցե"
+    >
+
+    <textarea
+      id="customerNote"
+      placeholder="Նշում պատվերի համար"
+    ></textarea>
+
+    <button onclick="checkout()">
+      Պատվիրել
+    </button>
+
+  </div>
+
 </div>
 
 <footer>
-© 2026 VARELI — Online Shop
+  © 2026 Vareli Shop
 </footer>
 
 <script>
 
-let products =
-JSON.parse(localStorage.getItem("vareli_products")) || [
-{
-id:1,
-name:"Vareli Beauty Cream",
-price:5000,
-image:"https://images.unsplash.com/photo-1556228578-8c89e6adf883",
-category:"beauty"
-},
-{
-id:2,
-name:"Vareli Lip Tint",
-price:6500,
-image:"https://images.unsplash.com/photo-1586495777744-4413f21062fa",
-category:"beauty"
-},
-{
-id:3,
-name:"Vareli Bag",
-price:12000,
-image:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa",
-category:"accessories"
-},
-{
-id:4,
-name:"Vareli New Collection",
-price:15000,
-image:"https://images.unsplash.com/photo-1529139574466-a303027c1d8b",
-category:"new"
-}
-];
-
-let cart =
-JSON.parse(localStorage.getItem("vareli_cart")) || [];
-
 let category="all";
 
-function save(){
-localStorage.setItem("vareli_products",JSON.stringify(products));
-localStorage.setItem("vareli_cart",JSON.stringify(cart));
+let products =
+  JSON.parse(localStorage.getItem("vareli_products")) || [];
+
+let cart =
+  JSON.parse(localStorage.getItem("vareli_cart")) || [];
+
+
+/* Հին ապրանքների համար անվտանգ դարձնում ենք sizes-ը */
+products = products.map(p => {
+
+  if(!Array.isArray(p.sizes)){
+
+    if(typeof p.sizes === "string"){
+
+      p.sizes = p.sizes
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+
+    }else{
+      p.sizes = [];
+    }
+
+  }
+
+  return p;
+
+});
+
+
+function saveProducts(){
+
+  localStorage.setItem(
+    "vareli_products",
+    JSON.stringify(products)
+  );
+
 }
+
+
+function save(){
+
+  localStorage.setItem(
+    "vareli_cart",
+    JSON.stringify(cart)
+  );
+
+}
+
+
+/* Ապրանքների ցուցադրում */
 
 function renderProducts(){
 
-let search=document.getElementById("search").value.toLowerCase();
+  let search =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
 
-let list=products.filter(p =>
-(category==="all" || p.category===category) &&
-p.name.toLowerCase().includes(search)
-);
+  let list = products.filter(p =>
 
-document.getElementById("products").innerHTML=list.map(p => `
+    (category === "all" || p.category === category) &&
 
-<div class="card">
+    String(p.name || "")
+      .toLowerCase()
+      .includes(search)
 
-<img src="${p.image}"
-onerror="this.src='https://via.placeholder.com/500'">
+  );
 
-<div class="cardInfo">
 
-<h3>${p.name}</h3>
+  if(list.length === 0){
 
-<div class="price">
-${p.price.toLocaleString()} ֏
-</div>
+    document.getElementById("products").innerHTML =
+      `<div class="empty">
+        Ապրանք չկա։
+      </div>`;
 
-${p.sizes && p.sizes.length ? `
-<select id="size-${p.id}" class="sizeSelect">
-  <option value="">Ընտրիր չափը</option>
-  ${p.sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
-</select>
-` : ""}
-
-<button class="add" onclick="addCart(${p.id}, document.getElementById('size-${p.id}')?.value || '')">
-  Ավելացնել զամբյուղ
-</button>
-
-</div>
-</div>
-
-`).join("");
-}
-
-function setCategory(c){
-category=c;
-renderProducts();
-}
-
-function addCart(id, size = ""){
-  const product = products.find(x => x.id === id);
-
-  if(product.sizes && product.sizes.length && !size){
-    alert("Խնդրում ենք ընտրել չափը");
     return;
   }
 
-  let item = cart.find(x => x.id === id && x.size === size);
 
-  if(item){
-    item.qty++;
-  }else{
-    cart.push({
-      id: id,
-      size: size,
-      qty: 1
-    });
+  document.getElementById("products").innerHTML =
+
+    list.map(p => {
+
+      let sizes = Array.isArray(p.sizes)
+        ? p.sizes
+        : [];
+
+
+      return `
+
+        <div class="card">
+
+          <img
+            src="${p.image || ""}"
+            onerror="this.src='https://via.placeholder.com/500'"
+          >
+
+          <div class="cardInfo">
+
+            <h3>${p.name}</h3>
+
+            <div class="price">
+              ${Number(p.price || 0).toLocaleString()} ֏
+            </div>
+
+
+            ${
+              sizes.length
+              ?
+
+              `
+              <select
+                id="size-${p.id}"
+                class="sizeSelect"
+              >
+
+                <option value="">
+                  Ընտրիր չափը
+                </option>
+
+                ${
+                  sizes.map(size =>
+                    `<option value="${size}">
+                      ${size}
+                    </option>`
+                  ).join("")
+                }
+
+              </select>
+              `
+
+              :
+
+              ""
+            }
+
+
+            <button
+              class="add"
+              onclick="addCart(
+                ${p.id},
+                document.getElementById('size-${p.id}')?.value || ''
+              )"
+            >
+              Ավելացնել զամբյուղ
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* Կատեգորիա */
+
+function setCategory(c,button){
+
+  category=c;
+
+  document
+    .querySelectorAll(".categories button")
+    .forEach(b => b.classList.remove("active"));
+
+  if(button){
+    button.classList.add("active");
   }
 
-  save();
-  renderCart();
+  renderProducts();
+
 }
+
+
+/* Զամբյուղ ավելացնել */
+
+function addCart(id,size=""){
+
+  const product =
+    products.find(p => p.id === id);
+
+  if(!product){
+    alert("Ապրանքը չի գտնվել։");
+    return;
+  }
+
+
+  let sizes = Array.isArray(product.sizes)
+    ? product.sizes
+    : [];
+
+
+  if(sizes.length && !size){
+
+    alert("Խնդրում ենք ընտրել չափը։");
+    return;
+
+  }
+
+
+  let item =
+    cart.find(
+      x =>
+        x.id === id &&
+        String(x.size || "") === String(size || "")
+    );
+
+
+  if(item){
+
+    item.qty++;
+
+  }else{
+
+    cart.push({
+
+      id:id,
+
+      size:size,
+
+      qty:1
+
+    });
+
+  }
+
+
+  save();
+
+  renderCart();
+
+  openCart();
+
+}
+
+
+/* Զամբյուղ */
 
 function renderCart(){
 
-let html="";
-let total=0;
-let count=0;
+  let html="";
 
-cart.forEach(item=>{
+  let total=0;
 
-let p=products.find(x=>x.id===item.id);
-if(!p)return;
+  let count=0;
 
-let sum=p.price*item.qty;
 
-total+=sum;
-count+=item.qty;
+  cart.forEach(item => {
 
-html+=`
+    let p =
+      products.find(x => x.id === item.id);
 
-<div class="cartItem">
+    if(!p)return;
 
-<div>
-<b>${p.name}</b><br>
-${item.size ? `Չափ՝ ${item.size}<br>` : ""}
-${p.price.toLocaleString()} ֏ × ${item.qty}
-</div>
 
-<div>
-<button onclick="changeQty(${p.id},1,'${item.size || ""}')">+</button>
-<button onclick="changeQty(${p.id},-1,'${item.size || ""}')">−</button>
-</div>
+    let qty =
+      Number(item.qty) || 1;
 
-</div>
 
-`;
-});
+    let sum =
+      Number(p.price || 0) * qty;
 
-document.getElementById("cartItems").innerHTML=html;
-document.getElementById("cartTotal").innerText=total.toLocaleString()+" ֏";
-document.getElementById("cartCount").innerText=count;
+
+    total += sum;
+
+    count += qty;
+
+
+    html += `
+
+      <div class="cartItem">
+
+        <div class="cartInfo">
+
+          <div class="cartName">
+            ${p.name}
+          </div>
+
+
+          ${
+            item.size
+            ?
+
+            `<div class="cartSize">
+              Չափ՝ <b>${item.size}</b>
+            </div>`
+
+            :
+
+            ""
+          }
+
+
+          <div>
+            ${Number(p.price || 0).toLocaleString()} ֏ × ${qty}
+          </div>
+
+        </div>
+
+
+        <div class="qty">
+
+          <button
+            onclick="changeQty(
+              ${p.id},
+              -1,
+              '${String(item.size || "").replace(/'/g,"&#39;")}'
+            )"
+          >
+            −
+          </button>
+
+
+          <b>${qty}</b>
+
+
+          <button
+            onclick="changeQty(
+              ${p.id},
+              1,
+              '${String(item.size || "").replace(/'/g,"&#39;")}'
+            )"
+          >
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+
+  if(html === ""){
+
+    html =
+      `<div class="empty">
+        Զամբյուղը դատարկ է։
+      </div>`;
+
+  }
+
+
+  document.getElementById("cartItems").innerHTML =
+    html;
+
+
+  document.getElementById("cartTotal").innerText =
+    total.toLocaleString() + " ֏";
+
+
+  document.getElementById("cartCount").innerText =
+    count;
 
 }
 
-document.getElementById("cart").innerHTML=
-html || "<p>Զամբյուղը դատարկ է։</p>";
 
-document.getElementById("total").innerText=
-total.toLocaleString();
+/* Քանակ */
 
-document.getElementById("cartCount").innerText=count;
-}
+function changeQty(id,n,size=""){
 
-function changeQty(id, n, size = ""){
-  let item = cart.find(x => x.id === id && x.size === size);
+  let item =
+    cart.find(
+      x =>
+        x.id === id &&
+        String(x.size || "") === String(size || "")
+    );
+
+
   if(!item)return;
+
 
   item.qty += n;
 
+
   if(item.qty <= 0){
-    cart = cart.filter(x => !(x.id === id && x.size === size));
+
+    cart =
+      cart.filter(
+        x =>
+          !(
+            x.id === id &&
+            String(x.size || "") === String(size || "")
+          )
+      );
+
   }
 
+
   save();
+
   renderCart();
+
 }
+
+
+/* Բացել զամբյուղ */
 
 function openCart(){
-document.getElementById("cartPanel").classList.add("open");
-renderCart();
+
+  document
+    .getElementById("cart")
+    .classList.add("open");
+
 }
 
+
+/* Փակել զամբյուղ */
+
 function closeCart(){
-document.getElementById("cartPanel").classList.remove("open");
+
+  document
+    .getElementById("cart")
+    .classList.remove("open");
+
 }
+
+
+/* Պատվեր */
 
 function checkout(){
 
-if(cart.length===0){
-alert("Զամբյուղը դատարկ է։");
-return;
+  if(cart.length === 0){
+
+    alert("Զամբյուղը դատարկ է։");
+    return;
+
+  }
+
+
+  let name =
+    document.getElementById("customerName").value.trim();
+
+  let phone =
+    document.getElementById("customerPhone").value.trim();
+
+  let address =
+    document.getElementById("customerAddress").value.trim();
+
+
+  if(!name || !phone || !address){
+
+    alert(
+      "Լրացրու անունը, հեռախոսը և հասցեն։"
+    );
+
+    return;
+
+  }
+
+
+  let orders =
+    JSON.parse(
+      localStorage.getItem("vareli_orders")
+    ) || [];
+
+
+  orders.push({
+
+    id:Date.now(),
+
+    name:name,
+
+    phone:phone,
+
+    address:address,
+
+    note:
+      document
+        .getElementById("customerNote")
+        .value,
+
+    cart:cart,
+
+    date:new Date().toLocaleString()
+
+  });
+
+
+  localStorage.setItem(
+    "vareli_orders",
+    JSON.stringify(orders)
+  );
+
+
+  alert("✅ Պատվերը ընդունված է։");
+
+
+  cart=[];
+
+  save();
+
+  renderCart();
+
+  closeCart();
+
 }
 
-let name=document.getElementById("customerName").value;
-let phone=document.getElementById("customerPhone").value;
-let address=document.getElementById("customerAddress").value;
 
-if(!name || !phone || !address){
-alert("Լրացրու անունը, հեռախոսը և հասցեն։");
-return;
-}
-
-let orders=
-JSON.parse(localStorage.getItem("vareli_orders")) || [];
-
-orders.push({
-id:Date.now(),
-name:name,
-phone:phone,
-address:address,
-note:document.getElementById("customerNote").value,
-cart:cart,
-date:new Date().toLocaleString()
-});
-
-localStorage.setItem("vareli_orders",JSON.stringify(orders));
-
-alert("✅ Պատվերը ընդունված է։");
-
-cart=[];
-save();
-renderCart();
-}
-
-function scrollProducts(){
-document.getElementById("products").scrollIntoView({
-behavior:"smooth"
-});
-}
+/* Սկզբնական բեռնում */
 
 renderProducts();
+
 renderCart();
 
 </script>
