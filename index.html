@@ -176,8 +176,15 @@ onerror="this.src='https://via.placeholder.com/500'">
 ${p.price.toLocaleString()} ֏
 </div>
 
-<button class="add" onclick="addCart(${p.id})">
-Ավելացնել զամբյուղ
+${p.sizes && p.sizes.length ? `
+<select id="size-${p.id}" class="sizeSelect">
+  <option value="">Ընտրիր չափը</option>
+  ${p.sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
+</select>
+` : ""}
+
+<button class="add" onclick="addCart(${p.id}, document.getElementById('size-${p.id}')?.value || '')">
+  Ավելացնել զամբյուղ
 </button>
 
 </div>
@@ -191,15 +198,28 @@ category=c;
 renderProducts();
 }
 
-function addCart(id){
+function addCart(id, size = ""){
+  const product = products.find(x => x.id === id);
 
-let item=cart.find(x=>x.id===id);
+  if(product.sizes && product.sizes.length && !size){
+    alert("Խնդրում ենք ընտրել չափը");
+    return;
+  }
 
-if(item)item.qty++;
-else cart.push({id:id,qty:1});
+  let item = cart.find(x => x.id === id && x.size === size);
 
-save();
-renderCart();
+  if(item){
+    item.qty++;
+  }else{
+    cart.push({
+      id: id,
+      size: size,
+      qty: 1
+    });
+  }
+
+  save();
+  renderCart();
 }
 
 function renderCart(){
