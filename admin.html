@@ -129,7 +129,12 @@ placeholder="Ապրանքի անուն">
 id="pPrice"
 type="number"
 placeholder="Գին ֏">
-
+  
+<input
+id="pSizes"
+type="text"
+placeholder="Չափեր (օր․ 40,41,42,43)">
+  
 <label>Նկար ընտրել հեռախոսից</label>
 
 <input
@@ -293,7 +298,11 @@ Number(document.getElementById("pPrice").value);
 
 let category=
 document.getElementById("pCategory").value;
-
+let sizes =
+document.getElementById("pSizes").value
+.split(",")
+.map(s => s.trim())
+.filter(Boolean);
 
 if(!name || !price){
 
@@ -320,7 +329,9 @@ price:price,
 image:image,
 
 category:category
-
+  
+sizes:sizes
+  
 });
 
 
@@ -328,7 +339,9 @@ save();
 
 
 document.getElementById("pName").value="";
-
+  
+document.getElementById("pSizes").value="";
+  
 document.getElementById("pPrice").value="";
 
 document.getElementById("pImage").value="";
