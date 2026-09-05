@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Vareli Admin</title>
 
 <style>
@@ -19,39 +20,35 @@ body{
 
 header{
   background:#111;
-  color:#fff;
-  padding:20px;
+  color:white;
+  padding:22px;
   text-align:center;
 }
 
 header h1{
   margin:0;
-  letter-spacing:4px;
+  letter-spacing:5px;
 }
 
 .container{
-  max-width:900px;
+  max-width:850px;
   margin:25px auto;
   padding:0 15px;
 }
 
 .panel{
-  background:#fff;
+  background:white;
   padding:20px;
-  border-radius:16px;
+  border-radius:18px;
   margin-bottom:20px;
   box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-
-h2{
-  margin-top:0;
 }
 
 input,
 select,
 button{
   width:100%;
-  padding:13px;
+  padding:14px;
   margin:7px 0;
   border-radius:10px;
   border:1px solid #ddd;
@@ -60,42 +57,54 @@ button{
 
 button{
   background:#111;
-  color:#fff;
+  color:white;
   border:0;
-  cursor:pointer;
   font-weight:bold;
 }
 
-button:hover{
-  opacity:.9;
+.addImage{
+  background:#555;
 }
 
-.fileBox{
-  border:2px dashed #ccc;
-  padding:20px;
-  text-align:center;
-  border-radius:12px;
-  margin:10px 0;
+.saveProduct{
+  background:#111;
+  margin-top:15px;
 }
 
-.preview{
+.imageList{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(100px,1fr));
+  grid-template-columns:repeat(3,1fr);
   gap:10px;
-  margin-top:10px;
+  margin-top:15px;
 }
 
-.preview img{
+.imageBox{
+  position:relative;
+}
+
+.imageBox img{
   width:100%;
-  height:100px;
+  height:120px;
   object-fit:cover;
   border-radius:10px;
 }
 
+.removeImage{
+  position:absolute;
+  top:5px;
+  right:5px;
+  width:30px;
+  height:30px;
+  padding:0;
+  margin:0;
+  border-radius:50%;
+  background:#d00;
+}
+
 .product{
   border:1px solid #eee;
-  border-radius:14px;
   padding:15px;
+  border-radius:15px;
   margin-top:15px;
   display:flex;
   gap:15px;
@@ -118,14 +127,15 @@ button:hover{
 }
 
 .delete{
-  background:#c62828;
   width:auto;
+  background:#c00;
   padding:10px 15px;
 }
 
 .small{
   color:#777;
   font-size:14px;
+  margin-top:5px;
 }
 </style>
 </head>
@@ -133,240 +143,342 @@ button:hover{
 <body>
 
 <header>
-  <h1>VARELI</h1>
-  <div>ADMIN PANEL</div>
+<h1>VARELI</h1>
+<div>ADMIN PANEL</div>
 </header>
 
 <div class="container">
 
-  <div class="panel">
-    <h2>Ավելացնել ապրանք</h2>
+<div class="panel">
 
-    <input
-      id="pName"
-      type="text"
-      placeholder="Ապրանքի անունը">
+<h2>Ավելացնել ապրանք</h2>
 
-    <input
-      id="pPrice"
-      type="number"
-      placeholder="Գին ֏">
+<input
+id="pName"
+type="text"
+placeholder="Ապրանքի անունը">
 
-    <select id="pCategory">
-      <option value="all">Բոլորը</option>
-      <option value="beauty">Beauty</option>
-      <option value="accessories">Accessories</option>
-      <option value="new">New</option>
-    </select>
+<input
+id="pPrice"
+type="number"
+placeholder="Գին ֏">
 
-    <input
-      id="pSizes"
-      type="text"
-      placeholder="Չափեր՝ 40,41,42,43">
+<select id="pCategory">
 
-    <div class="fileBox">
-      <b>Ընտրել ապրանքի նկարները</b>
-      <br>
-      <span class="small">
-        Կարող ես ընտրել մի քանի նկար միանգամից
-      </span>
+<option value="beauty">
+Beauty
+</option>
 
-      <input
-        id="pImages"
-        type="file"
-        accept="image/*"
-        multiple
-      >
+<option value="accessories">
+Accessories
+</option>
 
-      <div id="preview" class="preview"></div>
-    </div>
+<option value="new">
+New
+</option>
 
-    <button onclick="addProduct()">
-      Ավելացնել ապրանքը
-    </button>
-  </div>
+</select>
+
+<input
+id="pSizes"
+type="text"
+placeholder="Չափեր՝ 40,41,42,43">
+
+<h3>Ապրանքի նկարներ</h3>
+
+<input
+id="imageInput"
+type="file"
+accept="image/*"
+style="display:none">
+
+<button
+class="addImage"
+onclick="chooseImage()">
+
++ Ավելացնել նկար
+
+</button>
+
+<div id="imageList" class="imageList"></div>
+
+<button
+class="saveProduct"
+onclick="addProduct()">
+
+Ավելացնել ապրանքը
+
+</button>
+
+</div>
 
 
-  <div class="panel">
-    <h2>Ապրանքներ</h2>
+<div class="panel">
 
-    <div id="products"></div>
-  </div>
+<h2>Ապրանքներ</h2>
+
+<div id="products"></div>
+
+</div>
 
 </div>
 
 
 <script>
 
-const STORAGE_KEY = "vareli_products";
+const STORAGE_KEY =
+"vareli_products";
 
 let products = [];
 
+let selectedImages = [];
+
+
+/* Բեռնել ապրանքները */
+
 try{
-  products =
-    JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+products =
+JSON.parse(
+localStorage.getItem(STORAGE_KEY)
+) || [];
+
 }catch(e){
-  products = [];
+
+products=[];
+
 }
 
 
-/* Նկարների նախադիտում */
+/* Նկար ընտրել */
+
+function chooseImage(){
 
 document
-  .getElementById("pImages")
-  .addEventListener("change", function(){
+.getElementById("imageInput")
+.click();
 
-    const preview =
-      document.getElementById("preview");
+}
 
-    preview.innerHTML = "";
 
-    Array.from(this.files).forEach(file => {
+/* Երբ նկար ենք ընտրում */
 
-      const reader = new FileReader();
+document
+.getElementById("imageInput")
+.addEventListener(
+"change",
+function(){
 
-      reader.onload = function(e){
+const file =
+this.files[0];
 
-        const img =
-          document.createElement("img");
+if(!file)return;
 
-        img.src = e.target.result;
 
-        preview.appendChild(img);
+const reader =
+new FileReader();
 
-      };
 
-      reader.readAsDataURL(file);
+reader.onload =
+function(e){
 
-    });
+selectedImages.push(
+e.target.result
+);
 
-  });
+renderImages();
+
+};
+
+
+reader.readAsDataURL(file);
+
+
+/*
+  Որպեսզի նույն նկարը
+  նորից ընտրելու հնարավորություն լինի
+*/
+
+this.value="";
+
+});
+
+
+/* Նկարների ցուցադրում */
+
+function renderImages(){
+
+const box =
+document.getElementById(
+"imageList"
+);
+
+box.innerHTML =
+"";
+
+
+selectedImages.forEach(
+(img,index)=>{
+
+box.innerHTML += `
+
+<div class="imageBox">
+
+<img src="${img}">
+
+<button
+class="removeImage"
+onclick="removeImage(${index})">
+
+×
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+/* Նկար ջնջել */
+
+function removeImage(index){
+
+selectedImages.splice(
+index,
+1
+);
+
+renderImages();
+
+}
 
 
 /* Ապրանք ավելացնել */
 
 function addProduct(){
 
-  const name =
-    document.getElementById("pName")
-      .value.trim();
-
-  const price =
-    Number(
-      document.getElementById("pPrice")
-        .value
-    );
-
-  const category =
-    document.getElementById("pCategory")
-      .value;
-
-  const sizes =
-    document.getElementById("pSizes")
-      .value
-      .split(",")
-      .map(s => s.trim())
-      .filter(Boolean);
-
-  const files =
-    Array.from(
-      document.getElementById("pImages").files
-    );
+const name =
+document
+.getElementById("pName")
+.value
+.trim();
 
 
-  if(!name){
-    alert("Գրիր ապրանքի անունը");
-    return;
-  }
-
-  if(!price){
-    alert("Գրիր ապրանքի գինը");
-    return;
-  }
-
-  if(files.length === 0){
-    alert("Ընտրիր առնվազն մեկ նկար");
-    return;
-  }
+const price =
+Number(
+document
+.getElementById("pPrice")
+.value
+);
 
 
-  /*
-    Բոլոր նկարները վերածում ենք
-    Base64-ի և պահում localStorage-ում
-  */
-
-  let images = [];
-
-  let completed = 0;
-
-  files.forEach(file => {
-
-    const reader =
-      new FileReader();
-
-    reader.onload = function(e){
-
-      images.push(e.target.result);
-
-      completed++;
-
-      if(completed === files.length){
-
-        products.push({
-
-          id: Date.now(),
-
-          name: name,
-
-          price: price,
-
-          image: images[0],
-
-          images: images,
-
-          category: category,
-
-          sizes: sizes
-
-        });
+const category =
+document
+.getElementById("pCategory")
+.value;
 
 
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify(products)
-        );
+const sizes =
+document
+.getElementById("pSizes")
+.value
+.split(",")
+.map(s=>s.trim())
+.filter(Boolean);
 
 
-        alert("Ապրանքը ավելացվեց ✅");
+if(!name){
 
-        clearForm();
+alert(
+"Գրիր ապրանքի անունը"
+);
 
-        renderProducts();
-
-      }
-
-    };
-
-    reader.readAsDataURL(file);
-
-  });
+return;
 
 }
 
 
-/* Form մաքրել */
+if(!price){
 
-function clearForm(){
+alert(
+"Գրիր ապրանքի գինը"
+);
 
-  document.getElementById("pName").value = "";
+return;
 
-  document.getElementById("pPrice").value = "";
+}
 
-  document.getElementById("pSizes").value = "";
 
-  document.getElementById("pImages").value = "";
+if(selectedImages.length===0){
 
-  document.getElementById("preview").innerHTML = "";
+alert(
+"Ավելացրու առնվազն մեկ նկար"
+);
+
+return;
+
+}
+
+
+/* Ստեղծել ապրանք */
+
+const product = {
+
+id:Date.now(),
+
+name:name,
+
+price:price,
+
+image:selectedImages[0],
+
+images:[...selectedImages],
+
+category:category,
+
+sizes:sizes
+
+};
+
+
+products.push(product);
+
+
+/* Պահել */
+
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify(products)
+);
+
+
+/* Մաքրել */
+
+document
+.getElementById("pName")
+.value="";
+
+document
+.getElementById("pPrice")
+.value="";
+
+document
+.getElementById("pSizes")
+.value="";
+
+selectedImages=[];
+
+renderImages();
+
+renderProducts();
+
+
+alert(
+"Ապրանքը ավելացվեց ✅"
+);
 
 }
 
@@ -375,111 +487,115 @@ function clearForm(){
 
 function renderProducts(){
 
-  const box =
-    document.getElementById("products");
-
-  if(products.length === 0){
-
-    box.innerHTML =
-      "<p>Ապրանքներ դեռ չկան։</p>";
-
-    return;
-
-  }
+const box =
+document
+.getElementById("products");
 
 
-  box.innerHTML =
-    products.map(p => {
+if(products.length===0){
 
-      const image =
-        p.image ||
-        (
-          p.images &&
-          p.images[0]
-        ) ||
-        "https://via.placeholder.com/300";
+box.innerHTML =
+"<p>Ապրանքներ դեռ չկան։</p>";
 
-
-      const sizes =
-        Array.isArray(p.sizes)
-          ? p.sizes.join(", ")
-          : (
-              p.sizes || "Չափ չկա"
-            );
-
-
-      const imageCount =
-        Array.isArray(p.images)
-          ? p.images.length
-          : 1;
-
-
-      return `
-
-        <div class="product">
-
-          <img
-            src="${image}"
-            onerror="this.src='https://via.placeholder.com/300'"
-          >
-
-          <div class="productInfo">
-
-            <h3>
-              ${p.name}
-            </h3>
-
-            <div>
-              <b>
-                ${Number(p.price || 0).toLocaleString()} ֏
-              </b>
-            </div>
-
-            <div class="small">
-              Չափեր՝ ${sizes}
-            </div>
-
-            <div class="small">
-              Նկարներ՝ ${imageCount}
-            </div>
-
-          </div>
-
-          <button
-            class="delete"
-            onclick="deleteProduct(${p.id})"
-          >
-            Ջնջել
-          </button>
-
-        </div>
-
-      `;
-
-    }).join("");
+return;
 
 }
 
 
-/* Ապրանք ջնջել */
+box.innerHTML =
+products.map(p=>{
+
+let imgs =
+Array.isArray(p.images)
+?
+p.images
+:
+[p.image];
+
+
+let sizes =
+Array.isArray(p.sizes)
+?
+p.sizes.join(", ")
+:
+(p.sizes || "Չկա");
+
+
+return `
+
+<div class="product">
+
+<img
+src="${imgs[0]}"
+onerror="this.style.display='none'">
+
+<div class="productInfo">
+
+<h3>
+${p.name}
+</h3>
+
+<div>
+<b>
+${Number(p.price).toLocaleString()} ֏
+</b>
+</div>
+
+<div class="small">
+Չափեր՝ ${sizes}
+</div>
+
+<div class="small">
+Նկարներ՝ ${imgs.length}
+</div>
+
+</div>
+
+<button
+class="delete"
+onclick="deleteProduct(${p.id})">
+
+Ջնջել
+
+</button>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* Ջնջել ապրանքը */
 
 function deleteProduct(id){
 
-  if(!confirm("Ջնջե՞լ այս ապրանքը։")){
-    return;
-  }
+if(
+!confirm(
+"Ջնջե՞լ այս ապրանքը։"
+)
+){
 
-  products =
-    products.filter(
-      p => p.id !== id
-    );
+return;
 
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(products)
-  );
+}
 
-  renderProducts();
+
+products =
+products.filter(
+p=>p.id!==id
+);
+
+
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify(products)
+);
+
+
+renderProducts();
 
 }
 
